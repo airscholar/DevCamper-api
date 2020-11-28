@@ -10,6 +10,7 @@ const { connectDB } = require('./config/db');
 app = express();
 app.use(morgan('tiny'));
 app.use(helmet());
+app.use(express.json())
 
 // connect mongodb database
 connectDB();

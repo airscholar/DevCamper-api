@@ -1,6 +1,8 @@
-const express = require('express');
+const Bootcamp = require('../../models/Bootcamp')
 
-// GET /api/v1/bootcamps
+// @desc      Get all bootcamps
+// @route     GET /api/v1/bootcamps
+// @access    Public 
 const getAllBootcamps = (req, res, next) => {
   res.status(200).send({
     success: true,
@@ -8,7 +10,9 @@ const getAllBootcamps = (req, res, next) => {
   });
 };
 
-// GET /api/v1/bootcamps/1
+// @desc      Get single bootcamp
+// @route     GET /api/v1/bootcamp/:id
+// @access    Public 
 const getBootcampById = (req, res, next) => {
   res.status(200).send({
     success: true,
@@ -16,15 +20,20 @@ const getBootcampById = (req, res, next) => {
   });
 };
 
-// POST /api/v1/bootcamps
+// @desc      Create a new bootcamp
+// @route     POST /api/v1/bootcamps
+// @access    Private 
 const createNewBootcamp = (req, res, next) => {
+  console.log(req.body)
   res.status(201).send({
     success: true,
     message: 'Create new bootcamp',
   });
 };
 
-// PUT /api/v1/bootcamps/1
+// @desc      Update bootcamp
+// @route     PUT /api/v1/bootcamps/:id
+// @access    Public 
 const updateBootcamp = (req, res, next) => {
   res.status(200).send({
     success: true,
@@ -32,7 +41,9 @@ const updateBootcamp = (req, res, next) => {
   });
 };
 
-// DELETE /api/v1/bootcamps/1
+// @desc      Delete single bootcamp
+// @route     GET /api/v1/bootcamps
+// @access    private 
 const deleteBootcamp = (req, res, next) => {
   res.status(200).send({
     success: true,
