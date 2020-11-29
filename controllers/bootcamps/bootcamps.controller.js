@@ -23,11 +23,13 @@ const getBootcampById = (req, res, next) => {
 // @desc      Create a new bootcamp
 // @route     POST /api/v1/bootcamps
 // @access    Private 
-const createNewBootcamp = (req, res, next) => {
-  console.log(req.body)
+const createNewBootcamp = async (req, res, next) => {
+
+  const bootcamp = await Bootcamp.create(req.body);
+
   res.status(201).send({
     success: true,
-    message: 'Create new bootcamp',
+    message: bootcamp,
   });
 };
 
