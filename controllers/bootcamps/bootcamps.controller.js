@@ -21,8 +21,8 @@ const getBootcampById = (req, res, next) => {
 
   res.status(200).send({
     success: true,
-    message: `Get bootcamp ${req.params.id}`,
-    data: bootcamp
+    message: `Get bootcamp ${req.params.id}`, 
+    data: bootcamp,
   });
 };
 
