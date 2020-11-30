@@ -17,9 +17,12 @@ const getAllBootcamps =async (req, res, next) => {
 // @route     GET /api/v1/bootcamp/:id
 // @access    Public 
 const getBootcampById = (req, res, next) => {
+  const bootcamp = await Bootcamp.find(req.params.id);
+
   res.status(200).send({
     success: true,
     message: `Get bootcamp ${req.params.id}`,
+    data: bootcamp
   });
 };
 
