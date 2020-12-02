@@ -17,22 +17,33 @@ const getAllBootcamps =async (req, res, next) => {
 // @route     GET /api/v1/bootcamp/:id
 // @access    Public 
 const getBootcampById = (req, res, next) => {
+  try {
   const bootcamp = await Bootcamp.find(req.params.id);
 
+  if(!bootcamp){
+    res.status(400).json({
+      success: false
+    })
+  }
+  
   res.status(200).send({
     success: true,
     message: `Get bootcamp ${req.params.id}`, 
     data: bootcamp,
   });
+} catch (err) {
+  res.status(400).json({
+    success: false,
+    message: err.message
+  })
+}
 };
 
 // @desc      Create a new bootcamp
 // @route     POST /api/v1/bootcamps
 // @access    Private 
 const createNewBootcamp = async (req, res, next) => {
-
   try {
-    
     const bootcamp = await Bootcamp.create(req.body);
   
     res.status(201).send({
