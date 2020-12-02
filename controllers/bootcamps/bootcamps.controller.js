@@ -21,11 +21,11 @@ const getBootcampById = (req, res, next) => {
   const bootcamp = await Bootcamp.find(req.params.id);
 
   if(!bootcamp){
-    res.status(400).json({
+    return res.status(400).json({
       success: false
     })
   }
-  
+
   res.status(200).send({
     success: true,
     message: `Get bootcamp ${req.params.id}`, 
