@@ -6,9 +6,12 @@ const dotenv = require('dotenv').config({ path: './config/config.env' });
 const bootcampRouter = require('./routers/bootcamps/bootcamps.router');
 const { logger } = require('./middleware/logger');
 const { connectDB } = require('./config/db');
+const {errorHandler} = require('./middleware/error')
 
 app = express();
-app.use(morgan('tiny'));
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'));
+}
 app.use(helmet());
 app.use(express.json())
 
@@ -18,6 +21,8 @@ const PORT = process.env.PORT;
 
 app.use(logger);
 app.use('/api/v1/bootcamps', bootcampRouter);
+
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(
