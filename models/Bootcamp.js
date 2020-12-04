@@ -34,6 +34,7 @@ const BootcampSchema = new mongoose.Schema({
   },
   address: {
     type: String,
+    required: [true, 'Please add an Address'],
     maxlength: [500, 'Address can not be longer than 500 characters'],
   },
   // location: {
