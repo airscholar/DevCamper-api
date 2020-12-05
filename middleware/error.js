@@ -2,7 +2,7 @@ const ErrorResponse = require('../utils/errorResponse.helper')
 
 const errorHandler = (err, req, res, next) => {
   console.log(err.stack.red);
-  console.log(err)
+  // console.log(err)
   let error = {...err}
   error.message = err.message;
 
@@ -15,7 +15,7 @@ const errorHandler = (err, req, res, next) => {
 
   //duplicate key
   if(err.code === 11000) {
-    const msg = `Duplicate field value entered - ${err.keyValue._id}`;
+    const msg = `Duplicate field value entered - ${JSON.stringify(err.keyValue)}`;
 
     error = new ErrorResponse(msg, 400)
   }
