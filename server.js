@@ -20,7 +20,7 @@ connectDB();
 const PORT = process.env.PORT;
 
 app.use(logger);
-app.use('/api/v1/bootcamps', bootcampRouter);
+app.use('/api/v1/bootcamps', bootcampRouter); 
 
 app.use(errorHandler)
 
