@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const BootcampSchema = new mongoose.Schema({
   name: {
@@ -18,8 +19,8 @@ const BootcampSchema = new mongoose.Schema({
     type: String,
     match: [
       /https?:\/\/(www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/,
-      'Please use a valid URL with HTTP or HTTPs'
-    ]
+      'Please use a valid URL with HTTP or HTTPs',
+    ],
   },
   phone: {
     type: String,
@@ -37,25 +38,25 @@ const BootcampSchema = new mongoose.Schema({
     required: [true, 'Please add an Address'],
     maxlength: [500, 'Address can not be longer than 500 characters'],
   },
-  // location: {
-  //   //   GeoJSON Point
-  //   type: {
-  //     type: String, // Don't do `{ location: { type: String } }`
-  //     enum: ['Point'], // 'location.type' must be 'Point'
-  //     required: true,
-  //   },
-  //   coordinates: {
-  //     type: [Number],
-  //     required: true,
-  //     index: '2dsphere',
-  //   },
-  //   formattedAddress: String,
-  //   street: String,
-  //   city: String,
-  //   state: String,
-  //   zipcode: String,
-  //   country: String,
-  // },
+  location: {
+    //   GeoJSON Point
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      // required: true,
+    },
+    coordinates: {
+      type: [Number],
+      // required: true,
+      index: '2dsphere',
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    zipcode: String,
+    country: String,
+  },
   careers: {
     type: [String],
     required: true,
@@ -98,6 +99,11 @@ const BootcampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+BootcampSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
