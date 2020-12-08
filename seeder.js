@@ -45,4 +45,4 @@ if(process.argv[2] === '-i'){
     deleteData()
 }
 
- 
+/// @TODO: Create seeder for other data
