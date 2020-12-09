@@ -89,7 +89,7 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
 // @desc      Get bootcamp in radius
 // @route     GET /api/v1/bootcamps/radius/:zipcode/:distance
 // @access    Public
-const getBookcampInRadius = asyncHandler(async (req, res, next) => {
+const getBootcampInRadius = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
 
   const loc = await geocoder.geocode(zipcode);
@@ -119,7 +119,7 @@ module.exports = {
   getAllBootcamps,
   createNewBootcamp,
   updateBootcamp,
-  deleteBootcamp,
+  deleteBootcamp, 
   getBootcampById,
-  getBookcampInRadius,
+  getBootcampInRadius,
 };

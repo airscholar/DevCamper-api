@@ -4,7 +4,7 @@ const bootcampController = require('../../controllers/bootcamps/bootcamps.contro
 
 router
   .route('/radius/:zipcode/:distance')
-  .get(bootcampController.getBookcampInRadius);
+  .get(bootcampController.getBootcampInRadius);
 
 router
   .route('/')
