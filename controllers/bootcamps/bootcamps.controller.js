@@ -7,10 +7,11 @@ const geocoder = require('../../utils/geocoder.helper');
 // @route     GET /api/v1/bootcamps
 // @access    Public
 const getAllBootcamps = asyncHandler(async (req, res, next) => {
-  const bootcamps = await Bootcamp.find();
+  const bootcamps = await Bootcamp.find(req.query);
 
   res.status(200).send({
     success: true,
+    count: bootcamps.length,
     message: 'Show all bootcamps',
     data: bootcamps,
   });
