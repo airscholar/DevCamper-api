@@ -9,17 +9,35 @@ const geocoder = require('../../utils/geocoder.helper');
 const getAllBootcamps = asyncHandler(async (req, res, next) => {
   let query;
 
-  let queryStr = JSON.stringify(req.query);
+  // copy req.query
+  let reqQuery = { ...req.query };
 
+  // fields to exclude
+  const removeFields = ['select'];
+
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  console.log(reqQuery);
+
+  // create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  // create operators ($gte, $gt, etc)
   queryStr = queryStr.replace(
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
 
-  console.log(queryStr);
-
+  // find resource with query param
   query = Bootcamp.find(JSON.parse(queryStr));
 
+  // select field
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    query = query.select(fields);
+  }
+
+  // execute query
   const bootcamps = await query;
 
   res.status(200).send({
