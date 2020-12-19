@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const colors = require('colors')
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const bootcampRouter = require('./routers/bootcamps/bootcamps.router');
+const courseRouter = require('./routers/courses/courses.router');
 const { logger } = require('./middleware/logger');
 const { connectDB } = require('./config/db');
 const {errorHandler} = require('./middleware/error')
@@ -21,6 +22,7 @@ const PORT = process.env.PORT;
 
 app.use(logger);
 app.use('/api/v1/bootcamps', bootcampRouter); 
+app.use('/api/v1/courses', courseRouter); 
 
 app.use(errorHandler)
 
