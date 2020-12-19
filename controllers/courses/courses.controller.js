@@ -22,8 +22,8 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: 'Courses fetched successfully',
+    count: courses.length,
     data: courses,
-    length: courses.length,
   });
 }); 
 
