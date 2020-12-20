@@ -11,12 +11,11 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
   let query;
 
   if (req.params.bootcampId) {
-    query = Course.find({ bootcampId: req.params.bootcampId });
+    query = Course.find({ bootcamp: req.params.bootcampId });
   } else {
     query = Course.find();
   }
 
-  console.log('hit me')
   const courses = await query;
 
   res.status(200).json({
