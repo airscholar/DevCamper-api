@@ -11,9 +11,14 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
   let query;
 
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId }).populate('bootcamp');
+    query = Course.find({ bootcamp: req.params.bootcampId }).populate({
+      path: 'bootcamp',
+    });
   } else {
-    query = Course.find().populate('bootcamp');
+    query = Course.find().populate({
+      path: 'bootcamp',
+      select: 'name description ',
+    });
   }
 
   const courses = await query;
@@ -24,7 +29,7 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
     count: courses.length,
     data: courses,
   });
-}); 
+});
 
 module.exports = {
   getAllCourses,

@@ -29,7 +29,7 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
   );
 
   // find resource with query param
-  query = Bootcamp.find(JSON.parse(queryStr));
+  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
   // select field
   if (req.query.select) {
