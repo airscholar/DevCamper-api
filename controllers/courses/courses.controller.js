@@ -11,9 +11,9 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
   let query;
 
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId });
+    query = Course.find({ bootcamp: req.params.bootcampId }).populate('bootcamp');
   } else {
-    query = Course.find();
+    query = Course.find().populate('bootcamp');
   }
 
   const courses = await query;
