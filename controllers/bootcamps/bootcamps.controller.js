@@ -29,7 +29,10 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
   );
 
   // find resource with query param
-  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
+  query = Bootcamp.find(JSON.parse(queryStr)).populate({
+    path: 'courses',
+    select: 'title description minimumSkill tuition',
+  });
 
   // select field
   if (req.query.select) {
@@ -62,16 +65,16 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
 
   if (endIndex < total) {
     pagination.next = {
-      page: page+1,
-      limit 
+      page: page + 1,
+      limit,
     };
   }
 
-  if(startIndex >0){
+  if (startIndex > 0) {
     pagination.prev = {
-      page: page-1,
-      limit
-    }
+      page: page - 1,
+      limit,
+    };
   }
 
   res.status(200).send({
