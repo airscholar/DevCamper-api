@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const ErrorResponse = require('../utils/errorResponse.helper');
 const geocoder = require('../utils/geocoder.helper');
+const Course = require('./Course');
 
 const BootcampSchema = new mongoose.Schema(
   {
@@ -137,10 +139,21 @@ BootcampSchema.pre('save', async function (next) {
 
 // course cascade delete for bootcamp
 BootcampSchema.pre('remove', async (next) => {
-  await this.model('Course').deleteMany({ bootcamp: this._id });
+  try {
+    
+    await this.model('Course').deleteMany({ bootcamp: this._id });
 
-  next()
+  } catch (error) {
+    new ErrorResponse(error, 500);
+  }
+
+  next();
 });
+
+BootcampSchema.post('remove', async(next) => {
+  console.log('after deleting')
+})
+
 
 //Reverse populate with virtuals
 BootcampSchema.virtual('courses', {
