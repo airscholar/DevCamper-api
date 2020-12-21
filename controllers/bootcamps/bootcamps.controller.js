@@ -90,10 +90,12 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/bootcamp/:id
 // @access    Public
 const getBootcampById = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id).populate('courses');
 
   if (!bootcamp) {
-    return next(err);
+    return next(
+      new ErrorResponse(`Bootcamp with id: ${req.params.id} not found`, 404)
+    );
   }
 
   res.status(200).send({
@@ -141,13 +143,15 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/bootcamps
 // @access    private
 const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp with id: ${req.params.id} not found`, 404)
     );
   }
+
+  bootcamp.remove();
 
   res.status(200).send({
     success: true,
