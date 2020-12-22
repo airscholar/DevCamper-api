@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const ErrorResponse = require('../utils/errorResponse.helper');
 const geocoder = require('../utils/geocoder.helper');
 const Course = require('./Course');
 
@@ -138,22 +137,12 @@ BootcampSchema.pre('save', async function (next) {
 });
 
 // course cascade delete for bootcamp
-BootcampSchema.pre('remove', async (next) => {
-  try {
-    
-    await this.model('Course').deleteMany({ bootcamp: this._id });
-
-  } catch (error) {
-    new ErrorResponse(error, 500);
-  }
-
+BootcampSchema.pre('remove', async function (next) {
+  const courses = await Course.deleteMany({
+    bootcamp: this._id,
+  });
   next();
 });
-
-BootcampSchema.post('remove', async(next) => {
-  console.log('after deleting')
-})
-
 
 //Reverse populate with virtuals
 BootcampSchema.virtual('courses', {
