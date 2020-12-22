@@ -57,14 +57,18 @@ const getSingleCourse = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/bootcamps/:bootcampId/courses
 // @access    Private
 const addCourse = asyncHandler(async (req, res, next) => {
-  
   //check for bootcamp existence
   req.body.bootcamp = req.params.bootcampId;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
-  if(!bootcamp){
-    return next(new ErrorResponse(`No bootcamp with id ${req.params.bootcampId} found`, 404))
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(
+        `No bootcamp with id ${req.params.bootcampId} found`,
+        404
+      )
+    );
   }
 
   const course = await Course.create(req.body);
@@ -80,16 +84,17 @@ const addCourse = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/courses/:id
 // @access    Private
 const updateCourse = asyncHandler(async (req, res, next) => {
-
   let course = await Course.findById(req.params.id);
 
-  if(!course){
-    return next(new ErrorResponse(`No course with id ${req.params.bootcampId} found`, 404))
+  if (!course) {
+    return next(
+      new ErrorResponse(`No course with id ${req.params.bootcampId} found`, 404)
+    );
   }
 
   course = await Course.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   res.status(201).json({
@@ -99,9 +104,31 @@ const updateCourse = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc      Delete a course
+// @route     PELETE /api/v1/courses/:id
+// @access    Private
+const deleteCourse = asyncHandler(async (req, res, next) => {
+  let course = await Course.findById(req.params.id);
+
+  if (!course) {
+    return next(
+      new ErrorResponse(`No course with id ${req.params.bootcampId} found`, 404)
+    );
+  }
+
+  course.remove();
+
+  res.status(201).json({
+    success: true,
+    message: 'Course deleted successfully',
+    data: {},
+  });
+});
+
 module.exports = {
   getAllCourses,
   getSingleCourse,
   addCourse,
-  updateCourse
+  updateCourse,
+  deleteCourse,
 };
