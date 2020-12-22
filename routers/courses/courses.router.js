@@ -6,6 +6,10 @@ router
   .route('/')
   .get(coursesController.getAllCourses)
   .post(coursesController.addCourse);
-router.route('/:id').get(coursesController.getSingleCourse);
+
+router
+  .route('/:id')
+  .get(coursesController.getSingleCourse)
+  .put(coursesController.updateCourse);
 
 module.exports = router;
