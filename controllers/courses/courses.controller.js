@@ -47,6 +47,14 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
       console.log(fields)
       query = query.select(fields);
     }
+  
+    // sort field
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
     
   }
 
