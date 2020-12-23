@@ -23,7 +23,7 @@ const courses = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`, 'u
 const importData = async () => {
     try {
         await Bootcamp.create(bootcamps)
-        await Course.create(courses)
+        // await Course.create(courses)
         console.log(`Data imported`.green.inverse)
     } catch (err) {
         // next(err)
@@ -34,7 +34,7 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         await Bootcamp.deleteMany()
-        await Course.deleteMany()
+        // await Course.deleteMany()
         console.log(`Data destroyed`.red.inverse)
         process.exit(1 )
     } catch (err) {
