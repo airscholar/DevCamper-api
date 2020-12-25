@@ -123,6 +123,7 @@ const createNewBootcamp = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/bootcamps/:id
 // @access    Public
 const updateBootcamp = asyncHandler(async (req, res, next) => {
+  //find bootcamp and update
   const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -166,8 +167,10 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/bootcamps/radius/:zipcode/:distance
 // @access    Public
 const getBootcampInRadius = asyncHandler(async (req, res, next) => {
+  //get zipcode and distance
   const { zipcode, distance } = req.params;
 
+  //get location details from geocode using zipcode
   const loc = await geocoder.geocode(zipcode);
 
   const lng = loc[0].longitude;
