@@ -63,6 +63,7 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
   // pagination result
   const pagination = {};
 
+  //check endindex against total to enable and disable next
   if (endIndex < total) {
     pagination.next = {
       page: page + 1,
@@ -70,6 +71,7 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
     };
   }
 
+  //check startindex against total to enable and disable previous
   if (startIndex > 0) {
     pagination.prev = {
       page: page - 1,
