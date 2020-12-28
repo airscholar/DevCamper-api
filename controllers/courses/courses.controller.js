@@ -8,61 +8,21 @@ const asyncHandler = require('../../middleware/asyncHandler.middleware');
 // @route     GET /api/v1/bootcamps/:bootcampId/courses
 // @access    Public
 const getAllCourses = asyncHandler(async (req, res, next) => {
-  let query;
-
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId }).populate({
+    const courses = await Course.find({
+      bootcamp: req.params.bootcampId,
+    }).populate({
       path: 'bootcamp',
+    });
+
+    return res.status(200).json({
+      success: true,
+      count: courses.length,
+      data: courses,
     });
   } else {
-    // copy req.query
-    let reqQuery = { ...req.query };
-
-    // fields to exclude
-    const removeFields = ['select', 'sort', 'limit', 'page'];
-
-    removeFields.forEach((param) => delete reqQuery[param]);
-
-    console.log(reqQuery);
-
-    // create query string
-    let queryStr = JSON.stringify(reqQuery);
-    // create operators ($gte, $gt, etc)
-    queryStr = queryStr.replace(
-      /\b(gt|gte|lt|lte|in)\b/g,
-      (match) => `$${match}`
-    );
-
-    // find resource with query param
-    query = Course.find(JSON.parse(queryStr)).populate({
-      path: 'bootcamp',
-      select: 'name description email',
-    });
-
-    // select field
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      console.log(fields);
-      query = query.select(fields);
-    }
-
-    // sort field
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
-    }
+    res.status(200).json(res.advancedResults);
   }
-
-  const courses = await query;
-
-  res.status(200).json({
-    success: true,
-    message: 'Courses fetched successfully',
-    count: courses.length,
-    data: courses,
-  });
 });
 
 // @desc      Get single courses
