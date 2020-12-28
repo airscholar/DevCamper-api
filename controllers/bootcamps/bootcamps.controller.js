@@ -215,6 +215,10 @@ const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Please upload an image file', 400));
   }
 
+  //check file size
+  if(!req.files.file.size > process.env.MAX_FILE_UPLOAD_SIZE){
+    return next(new ErrorResponse(`File size cannot be greater than ${process.env.MAX_FILE_UPLOAD_SIZE}`, 400));
+  }
 
   // res.status(200).send({
   //   success: true,
