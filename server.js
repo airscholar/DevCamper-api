@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const colors = require('colors');
+const path = require('path')
 const fileUpload = require('express-fileupload');
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const bootcampRouter = require('./routers/bootcamps/bootcamps.router');
@@ -23,6 +24,9 @@ const PORT = process.env.PORT;
 
 app.use(logger);
 app.use(fileUpload())
+
+//set static file
+app.use(express.static(path.join(__dirname, 'public'))) 
 
 app.use('/api/v1/bootcamps', bootcampRouter);
 app.use('/api/v1/courses', courseRouter);
