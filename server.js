@@ -7,6 +7,7 @@ const fileUpload = require('express-fileupload');
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const bootcampRouter = require('./routers/bootcamps/bootcamps.router');
 const courseRouter = require('./routers/courses/courses.router');
+const authRouter = require('./routers/auth/auth.route')
 const { logger } = require('./middleware/logger');
 const { connectDB } = require('./config/db');
 const { errorHandler } = require('./middleware/error');
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/v1/bootcamps', bootcampRouter);
 app.use('/api/v1/courses', courseRouter);
+app.use('/api/v1/auth', authRouter);
 
 app.use(errorHandler);
 
