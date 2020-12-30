@@ -8,18 +8,24 @@ const asyncHandler = require('../../middleware/asyncHandler.middleware');
 const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
-  console.log(name, email, password, role);
-  const createdUser = await User.create({
+  const user = await User.create({
     name,
     email,
     password,
     role,
   });
 
+  // Create signed JwtToken on the method
+  //   Note the diff between statics and method
+  // statics will be User.staticMethod()
+  // method will be createdUser.method()
+  const token = await user.getSignedJwtToken();
+
   res.status(201).json({
     success: true,
     message: 'User created successfully',
-    data: createdUser,
+    data: user,
+    token,
   });
 });
 

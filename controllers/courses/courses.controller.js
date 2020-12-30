@@ -7,7 +7,7 @@ const asyncHandler = require('../../middleware/asyncHandler.middleware');
 // @route     GET /api/v1/courses
 // @route     GET /api/v1/bootcamps/:bootcampId/courses
 // @access    Public
-const getAllCourses = asyncHandler(async (req, res, next) => {
+const getAllCourses = asyncHandler(async (req, res, next) => { 
   if (req.params.bootcampId) {
     const courses = await Course.find({
       bootcamp: req.params.bootcampId,
