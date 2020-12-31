@@ -36,16 +36,21 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return new ErrorResponse('Please provide an email and password', 400);
+    return next(new ErrorResponse('Please provide an email and password', 400));
   }
 
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
-    return new ErrorResponse('Invalid credentials', 401);
+    return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  
+  //   check if password matches
+  const isMatch = await user.matchEnteredPassword(password);
+
+  if (!isMatch) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  }
 
   // Create signed JwtToken on the method
   //   Note the diff between statics and method
@@ -55,10 +60,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: 'User created successfully',
+    message: 'User logged in successfully',
     data: user,
     token,
   });
 });
 
-module.exports = { registerUser };
+module.exports = { registerUser, loginUser };
