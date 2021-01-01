@@ -15,18 +15,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     role,
   });
 
-  // Create signed JwtToken on the method
-  //   Note the diff between statics and method
-  // statics will be User.staticMethod()
-  // method will be createdUser.method()
-  const token = await user.getSignedJwtToken();
-
-  res.status(201).json({
-    success: true,
-    message: 'User created successfully',
-    data: user,
-    token,
-  });
+  sendTokenResponse(user, 200, res);
 });
 
 // @desc      Login User
@@ -52,18 +41,30 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  // Create signed JwtToken on the method
+  sendTokenResponse(user, 200, res);
+});
+
+// Get token from model, create cookie, and send response
+const sendTokenResponse = async (user, statusCode, res) => {
+// Create signed JwtToken on the method
   //   Note the diff between statics and method
   // statics will be User.staticMethod()
   // method will be createdUser.method()
   const token = await user.getSignedJwtToken();
 
-  res.status(201).json({
+  const options = {
+    //30 days to milliseconds
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  } 
+
+  res
+  .status(statusCode)
+  .cookie('token', token, options)
+  .json({
     success: true,
-    message: 'User logged in successfully',
-    data: user,
-    token,
-  });
-});
+    token
+  })
+}
 
 module.exports = { registerUser, loginUser };
