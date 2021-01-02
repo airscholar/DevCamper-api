@@ -58,6 +58,7 @@ const sendTokenResponse = async (user, statusCode, res) => {
     httpOnly: true
   } 
 
+  //add secure to options to determine running capacity
   if(process.env.NODE_ENV === 'production'){
     options.secure = true 
   }
