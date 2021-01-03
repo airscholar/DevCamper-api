@@ -11,7 +11,7 @@ const {
 } = require('../../controllers/bootcamps/bootcamps.controller');
 
 const Bootcamp = require('../../models/Bootcamp');
-const advancedResults = require('../../middleware/advancedResults');
+const advancedResults = require('../../middleware/advancedResults.middleware');
 
 const courseRouter = require('../courses/courses.router');
 
