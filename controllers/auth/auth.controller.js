@@ -46,7 +46,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 // Get token from model, create cookie, and send response
 const sendTokenResponse = async (user, statusCode, res) => {
-// Create signed JwtToken on the method
+  // Create signed JwtToken on the method
   //   Note the diff between statics and method
   // statics will be User.staticMethod()
   // method will be createdUser.method()
@@ -54,22 +54,34 @@ const sendTokenResponse = async (user, statusCode, res) => {
 
   const options = {
     //30 days to milliseconds
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
-    httpOnly: true
-  } 
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
 
   //add secure to options to determine running capacity
-  if(process.env.NODE_ENV === 'production'){
-    options.secure = true 
+  if (process.env.NODE_ENV === 'production') {
+    options.secure = true;
   }
 
-  res
-  .status(statusCode)
-  .cookie('token', token, options)
-  .json({
+  res.status(statusCode).cookie('token', token, options).json({
     success: true,
-    token
-  })
-}
+    token,
+  });
+};
 
-module.exports = { registerUser, loginUser };
+// @desc      Get Logged In User
+// @route     GET /api/v1/auth/me
+// @access    Private
+const loggedInUser = asyncHandler(async (req, res, next) => {
+  // const user = User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+module.exports = { registerUser, loginUser, loggedInUser };
