@@ -8,7 +8,6 @@ const geocoder = require('../../utils/geocoder.helper');
 // @route     GET /api/v1/bootcamps
 // @access    Public
 const getAllBootcamps = asyncHandler(async (req, res, next) => {
-  
   res.status(200).send(res.advancedResults);
 });
 
@@ -33,7 +32,15 @@ const getBootcampById = asyncHandler(async (req, res, next) => {
 const createNewBootcamp = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
-  
+
+  // check if user has already created a bootcamp
+  const publishedBootcamp = Bootcamp.findOne({ user: req.user.id });
+
+  if(publishedBootcamp && req.user.role !== 'admin'){
+    return next(new ErrorResponse(`User ${req.user.role} has already published a bootcamp`, 400))
+  }
+
+
   const bootcamp = await Bootcamp.create(req.body);
 
   res.status(201).send({
@@ -159,13 +166,13 @@ const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Problem with file upload`, 500));
     }
     await Bootcamp.findByIdAndUpdate(req.params.id, {
-      photo: file.name
-    })
+      photo: file.name,
+    });
 
     res.status(200).json({
       success: true,
-      data: file.name
-    })
+      data: file.name,
+    });
   });
   // res.status(200).send({
   //   success: true,
