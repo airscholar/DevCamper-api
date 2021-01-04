@@ -10,12 +10,13 @@ const {
   uploadBootcampPhoto,
 } = require('../../controllers/bootcamps/bootcamps.controller');
 
-const { protectRoute } = require('../../middleware/auth.middleware')
+const { protectRoute } = require('../../middleware/auth.middleware');
 
 const Bootcamp = require('../../models/Bootcamp');
 const advancedResults = require('../../middleware/advancedResults.middleware');
 
 const courseRouter = require('../courses/courses.router');
+const { authorize } = require('../../controllers/auth/auth.controller');
 
 //reroute other courses routes to courses
 router.use('/:bootcampId/courses', courseRouter);
@@ -26,11 +27,11 @@ router.route('/:id/photo').put(protectRoute, uploadBootcampPhoto);
 router
   .route('/')
   .get(advancedResults(Bootcamp, 'courses'), getAllBootcamps)
-  .post(protectRoute, createNewBootcamp);
+  .post(protectRoute, authorize(['pubisher', 'admin']), createNewBootcamp);
 router
   .route('/:id')
-  .get(advancedResults(Bootcamp, 'courses'),  getBootcampById)
-  .put(protectRoute, updateBootcamp)
-  .delete(protectRoute, deleteBootcamp);
+  .get(advancedResults(Bootcamp, 'courses'), getBootcampById)
+  .put(protectRoute, authorize(['publisher', 'admin']), updateBootcamp)
+  .delete(protectRoute, authorize(['publisher', 'admin']), deleteBootcamp);
 
 module.exports = router;
