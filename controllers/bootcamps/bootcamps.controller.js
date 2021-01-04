@@ -37,9 +37,8 @@ const createNewBootcamp = asyncHandler(async (req, res, next) => {
   const publishedBootcamp = Bootcamp.findOne({ user: req.user.id });
 
   if(publishedBootcamp && req.user.role !== 'admin'){
-    return next(new ErrorResponse(`User ${req.user.role} has already published a bootcamp`, 400))
+    return next(new ErrorResponse(`User with ID ${req.user.id} has already published a bootcamp`, 400))
   }
-
 
   const bootcamp = await Bootcamp.create(req.body);
 
