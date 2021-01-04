@@ -47,7 +47,7 @@ const authorize = (...roles) => {
       return next(
         new ErrorResponse(
           `Role ${req.user.role} is not authorized to access the resource`,
-          401
+          403
         )
       );
     }
