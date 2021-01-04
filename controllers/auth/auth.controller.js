@@ -84,20 +84,4 @@ const loggedInUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc      Authorize user based on role
-const authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new ErrorResponse(
-          `Role ${req.user.role} is not authorized to access the resource`,
-          401
-        )
-      );
-    }
-
-    next();
-  };
-};
-
-module.exports = { registerUser, loginUser, loggedInUser, authorize };
+module.exports = { registerUser, loginUser, loggedInUser };
