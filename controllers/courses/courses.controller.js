@@ -140,6 +140,18 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  //check that the user is the bootcamp owner
+  if (
+    req.user.id.toString() !== bootcamp.user.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} not authorized to add course to bootcamp ${bootcamp._id}`,
+        403
+      )
+    );
+  }
   course.remove();
 
   res.status(201).json({
