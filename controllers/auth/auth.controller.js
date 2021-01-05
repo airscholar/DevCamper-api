@@ -37,6 +37,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   //   check if password matches
   const isMatch = await user.matchEnteredPassword(password);
 
+  // when not matched
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
