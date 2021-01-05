@@ -54,6 +54,9 @@ const addCourse = asyncHandler(async (req, res, next) => {
   //check for bootcamp existence
   req.body.bootcamp = req.params.bootcampId;
 
+  //add user to request body
+  req.body.user = req.user.id
+
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
   if (!bootcamp) {
@@ -61,6 +64,19 @@ const addCourse = asyncHandler(async (req, res, next) => {
       new ErrorResponse(
         `No bootcamp with id ${req.params.bootcampId} found`,
         404
+      )
+    );
+  }
+
+  //check that the user is the bootcamp owner
+  if (
+    req.user.id.toString() !== bootcamp.user.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} not authorized to add course to bootcamp ${bootcamp._id}`,
+        403
       )
     );
   }
