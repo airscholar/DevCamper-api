@@ -185,6 +185,7 @@ const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
     );
   }
 
+  //continue uploading if condition is met
   if (!req.files) {
     return next(new ErrorResponse('Please upload a file', 400));
   }
