@@ -70,8 +70,7 @@ const addCourse = asyncHandler(async (req, res, next) => {
 
   //check that the user is the bootcamp owner
   if (
-    req.user.id.toString() !== bootcamp.user.toString() &&
-    req.user.role !== 'admin'
+    req.user.id.toString() !== bootcamp.user.toString() && req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
