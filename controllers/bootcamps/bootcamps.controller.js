@@ -107,7 +107,7 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
     );
   }
 
-  //check the user to ensure the updating user is the creator
+  //check the user to ensure the deleting user is the creator
   if (
     req.user.id.toString() !== bootcamp.user.toString() &&
     req.user.role !== 'admin'
@@ -169,6 +169,19 @@ const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp with id: ${req.params.id} not found`, 404)
+    );
+  }
+
+   //check the user to ensure the update user is the creator
+   if (
+    req.user.id.toString() !== bootcamp.user.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} not authorized to update this bootcamp`,
+        403
+      )
     );
   }
 
