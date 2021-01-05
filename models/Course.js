@@ -44,7 +44,7 @@ const CourseSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    requierd: true,
+    required: true,
   },
 });
 
