@@ -7,7 +7,7 @@ const asyncHandler = require('../../middleware/asyncHandler.middleware');
 // @route     GET /api/v1/courses
 // @route     GET /api/v1/bootcamps/:bootcampId/courses
 // @access    Public
-const getAllCourses = asyncHandler(async (req, res, next) => { 
+const getAllCourses = asyncHandler(async (req, res, next) => {
   if (req.params.bootcampId) {
     const courses = await Course.find({
       bootcamp: req.params.bootcampId,
@@ -55,7 +55,7 @@ const addCourse = asyncHandler(async (req, res, next) => {
   req.body.bootcamp = req.params.bootcampId;
 
   //add user to request body
-  req.body.user = req.user.id
+  req.body.user = req.user.id;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
@@ -100,6 +100,19 @@ const updateCourse = asyncHandler(async (req, res, next) => {
   if (!course) {
     return next(
       new ErrorResponse(`No course with id ${req.params.bootcampId} found`, 404)
+    );
+  }
+
+  //check that the user is the bootcamp owner
+  if (
+    req.user.id.toString() !== bootcamp.user.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} not authorized to add course to bootcamp ${bootcamp._id}`,
+        403
+      )
     );
   }
 
