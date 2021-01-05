@@ -23,7 +23,11 @@ const getBootcampById = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).send(res.advancedResults);
+  res.status(200).send({
+    success: true,
+    message: 'Bootcamp data fetched successfully!',
+    data: bootcamp,
+  });
 });
 
 // @desc      Create a new bootcamp
@@ -36,8 +40,13 @@ const createNewBootcamp = asyncHandler(async (req, res, next) => {
   // check if user has already created a bootcamp
   const publishedBootcamp = Bootcamp.findOne({ user: req.user.id });
 
-  if(publishedBootcamp && req.user.role !== 'admin'){
-    return next(new ErrorResponse(`User with ID ${req.user.id} has already published a bootcamp`, 400))
+  if (publishedBootcamp && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User with ID ${req.user.id} has already published a bootcamp`,
+        400
+      )
+    );
   }
 
   const bootcamp = await Bootcamp.create(req.body);
@@ -53,16 +62,28 @@ const createNewBootcamp = asyncHandler(async (req, res, next) => {
 // @access    Public
 const updateBootcamp = asyncHandler(async (req, res, next) => {
   //find bootcamp and update
-  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp with id: ${req.params.id} not found`, 404)
     );
   }
+
+  //check the user to ensure the updating user is the creator
+  if (req.user.id.toString() !== bootcamp.user.toString() && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} not authorized to update this bootcamp`,
+        403
+      )
+    );
+  }
+
+  bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).send({
     success: true,
