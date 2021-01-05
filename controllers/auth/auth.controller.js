@@ -44,6 +44,40 @@ const loginUser = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+// @desc      Get Logged In User
+// @route     GET /api/v1/auth/me
+// @access    Private
+const loggedInUser = asyncHandler(async (req, res, next) => {
+  // const user = User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+// @desc      Forgot password
+// @route     POST /api/v1/auth/forgotpassword
+// @access    Public
+const forgotpassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorResponse('User does not exist', 400));
+  }
+
+  // generate token
+  const token = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
 // Get token from model, create cookie, and send response
 const sendTokenResponse = async (user, statusCode, res) => {
   // Create signed JwtToken on the method
@@ -71,17 +105,4 @@ const sendTokenResponse = async (user, statusCode, res) => {
   });
 };
 
-// @desc      Get Logged In User
-// @route     GET /api/v1/auth/me
-// @access    Private
-const loggedInUser = asyncHandler(async (req, res, next) => {
-  // const user = User.findById(req.user.id);
-  const user = await User.findById(req.user.id);
-
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
-});
-
-module.exports = { registerUser, loginUser, loggedInUser };
+module.exports = { registerUser, loginUser, loggedInUser, forgotpassword };
