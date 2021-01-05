@@ -103,6 +103,8 @@ const updateCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  let bootcamp = await Bootcamp.findById(course.bootcamp);
+
   //check that the user is the bootcamp owner
   if (
     req.user.id.toString() !== bootcamp.user.toString() &&
