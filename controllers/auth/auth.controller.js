@@ -132,6 +132,24 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+// @desc    Update Details
+// @route   /api/v1/auth/updateDetails
+// @method  GET
+// @access  Private
+const updateDetails = asyncHandler(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { name: req.body.name },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    data: user,
+    message: `User ${req.user.id} updated successfully`,
+  });
+});
+
 // Get token from model, create cookie, and send response
 const sendTokenResponse = async (user, statusCode, res) => {
   // Create signed JwtToken on the method
@@ -165,4 +183,5 @@ module.exports = {
   loggedInUser,
   forgotpassword,
   resetPassword,
+  updateDetails,
 };
