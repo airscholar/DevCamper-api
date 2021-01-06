@@ -150,6 +150,28 @@ const updateDetails = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Update Password
+// @route   /api/v1/auth/updatePassword
+// @method  GET
+// @access  Private
+const updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('+password');
+
+  if (!user.matchEnteredPassword(req.body.currentPassword)) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    data: user,
+    message: `User ${req.user.id} password changed successfully`,
+  });
+});
+
 // Get token from model, create cookie, and send response
 const sendTokenResponse = async (user, statusCode, res) => {
   // Create signed JwtToken on the method
@@ -184,4 +206,5 @@ module.exports = {
   forgotpassword,
   resetPassword,
   updateDetails,
+  updatePassword,
 };
