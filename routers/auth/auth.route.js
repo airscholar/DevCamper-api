@@ -9,8 +9,10 @@ const {
   updatePassword,
 } = require('../../controllers/auth/auth.controller');
 const { protectRoute } = require('../../middleware/auth.middleware');
-
+const userRouter = require('../users/users.route');
 const router = express.Router();
+
+router.use('/users', userRouter);
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);

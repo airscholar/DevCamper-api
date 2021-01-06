@@ -40,6 +40,50 @@ const protectRoute = asyncHandler(async (req, res, next) => {
   }
 });
 
+// protect admin route
+const protectAdminRoute = asyncHandler(async (req, res, next) => {
+  let token;
+
+  //extract token from headers sent with the request
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  // check token in cookies
+  // else if (req.cookies.token) {
+  //   token = req.cookies.token;
+  // }
+
+  if (!token) {
+    return next(
+      new ErrorResponse('Access to this section is not authorized!', 401)
+    );
+  }
+
+  try {
+    //  verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id);
+
+    if (user.role !== 'admin') {
+      return next(
+        new ErrorResponse('Access to this section is not authorized!', 401)
+      );
+    }
+
+    req.user = user;
+
+    next();
+  } catch (err) {
+    return next(
+      new ErrorResponse('Access to this section is not authorized!', 401)
+    );
+  }
+});
+
 // @desc      Authorize user based on role
 const authorize = (...roles) => {
   return (req, res, next) => {
@@ -56,4 +100,4 @@ const authorize = (...roles) => {
   };
 };
 
-module.exports = { protectRoute, authorize };
+module.exports = { protectRoute, protectAdminRoute, authorize };
