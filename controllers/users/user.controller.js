@@ -38,7 +38,7 @@ const createUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User cannot be created`, 500));
   }
 
-  res.status(200).json({
+  res.status(201).json({
     success: true,
     message: 'User created successfully',
     data: user,
