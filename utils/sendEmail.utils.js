@@ -13,7 +13,7 @@ const sendEmail = async (options) => {
 
   // send mail with defined transport object
   const message = {
-    from: process.env.SMTP_FROM,
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM}>`,
     to: options.recipients,
     subject: options.subject,
     text: options.message,
