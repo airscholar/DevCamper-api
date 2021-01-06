@@ -69,12 +69,14 @@ const forgotpassword = asyncHandler(async (req, res, next) => {
   }
 
   // generate token
-  const resetToken = user.getResetPasswordToken();
+  const resetToken = await user.getResetPasswordToken();
 
   // create reset url
   const resetUrl = `${req.protocol}://${req.get(
     'host'
   )}/api/v1/resetpassword/${resetToken}`;
+
+  await user.save({ validateBeforeSave: false });
 
   const message = `You are receiving this email because you (or someone else) has request the reset of a password. Please make a PUT request to \n\n ${resetUrl}`;
 
@@ -85,7 +87,7 @@ const forgotpassword = asyncHandler(async (req, res, next) => {
       message,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: 'Email Sent!',
     });
@@ -98,13 +100,6 @@ const forgotpassword = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse('Email could not be sent!', 500));
   }
-
-  await user.save({ validateBeforeSave: false });
-
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
 });
 
 // Get token from model, create cookie, and send response
