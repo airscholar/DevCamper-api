@@ -15,10 +15,12 @@ const { protectRoute, authorize } = require('../../middleware/auth.middleware');
 const Bootcamp = require('../../models/Bootcamp');
 const advancedResults = require('../../middleware/advancedResults.middleware');
 
-const courseRouter = require('../courses/courses.router');
+const courseRouter = require('../courses/courses.route');
+const reviewRouter = require('../reviews/reviews.route');
 
 //reroute other courses routes to courses
 router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/reviews', reviewRouter);
 
 router.route('/radius/:zipcode/:distance').get(getBootcampInRadius);
 router.route('/:id/photo').put(protectRoute, uploadBootcampPhoto);

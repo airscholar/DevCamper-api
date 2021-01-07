@@ -8,8 +8,9 @@ const dotenv = require('dotenv').config({ path: './config/config.env' });
 const cookieParser = require('cookie-parser');
 
 //routes
-const bootcampRouter = require('./routers/bootcamps/bootcamps.router');
-const courseRouter = require('./routers/courses/courses.router');
+const bootcampRouter = require('./routers/bootcamps/bootcamps.route');
+const courseRouter = require('./routers/courses/courses.route');
+const reviewRouter = require('./routers/reviews/reviews.route');
 const authRouter = require('./routers/auth/auth.route');
 
 //middleware
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1/bootcamps', bootcampRouter);
 app.use('/api/v1/courses', courseRouter);
+app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/auth', authRouter);
 
 app.use(errorHandler);
