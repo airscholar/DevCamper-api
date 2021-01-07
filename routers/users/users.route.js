@@ -9,19 +9,23 @@ const {
 const advancedResults = require('../../middleware/advancedResults.middleware');
 const {
   protectRoute,
-  protectAdminRoute,
+  
+  authorize,
 } = require('../../middleware/auth.middleware');
 const User = require('../../models/User');
 
 const router = express.Router();
 
+router.use(protectRoute)
+router.use(authorize('admin'))
+
 router
   .route('/')
-  .get(advancedResults(User, 'bootcamp'), getUsers)
-  .post(protectAdminRoute, createUser)
+  .get(advancedResults(User), getUsers)
+  .post(createUser)
   router
   .route('/:userId')
-  .put(protectAdminRoute, updateUser)
-  .get(protectAdminRoute, getUser)
-  .delete(protectAdminRoute, deleteUser);
+  .put(updateUser)
+  .get(getUser)
+  .delete(deleteUser);
 module.exports = router;

@@ -69,11 +69,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
 // @route     DELETE /api/v1/auth/users/:userId
 // @access    Private/Admin
 const deleteUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findByIdAndDelete(req.params.userId);
-
-  if (!user) {
-    return next(new ErrorResponse(`Error occured while deleting user`, 500));
-  }
+  await User.findByIdAndDelete(req.params.userId);
 
   res.status(200).json({
     success: true,
