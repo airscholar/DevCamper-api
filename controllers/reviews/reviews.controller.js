@@ -69,4 +69,37 @@ const createReview = asyncHandler(async (req, res, next) => {
   });
 });
 
-module.exports = { getAllReviews, getReview, createReview };
+// @desc      Update review
+// @route     POST /api/v1/reviews/:id
+// @access    Private
+const updateReview = asyncHandler(async (req, res, next) => {
+  let review = await Review.findById(req.params.id);
+
+  if (!review) {
+    return next(
+      new ErrorResponse(`Review with Id ${req.params.id} not found!`)
+    );
+  }
+
+  review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  //make sure that the user is the owner or the user is an admin
+  if (
+    review.bootcamp.id.toString() !== req.user.id.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse('User not authorized to update this review', 400)
+    );
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: review,
+  });
+});
+
+module.exports = { getAllReviews, getReview, createReview, updateReview };
