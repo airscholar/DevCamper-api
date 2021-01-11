@@ -43,7 +43,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
-
   sendTokenResponse(user, 200, res);
 });
 
