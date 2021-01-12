@@ -12,6 +12,7 @@ const protectRoute = asyncHandler(async (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
+    //split bearer from token 
     token = req.headers.authorization.split(' ')[1];
   }
   // check token in cookies
