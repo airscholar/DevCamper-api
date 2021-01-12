@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const colors = require('colors');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+const sanitize = require('express-mongo-sanitize');
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const cookieParser = require('cookie-parser');
 
@@ -32,6 +33,7 @@ const PORT = process.env.PORT;
 app.use(logger);
 app.use(fileUpload());
 app.use(cookieParser());
+app.use(sanitize());
 
 //set static file
 app.use(express.static(path.join(__dirname, 'public')));
