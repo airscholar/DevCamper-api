@@ -7,6 +7,7 @@ const {
   resetPassword,
   updateDetails,
   updatePassword,
+  logoutUser,
 } = require('../../controllers/auth/auth.controller');
 const { protectRoute } = require('../../middleware/auth.middleware');
 const userRouter = require('../users/users.route');
@@ -16,6 +17,7 @@ router.use('/users', userRouter);
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/logout', logoutUser);
 router.get('/me', protectRoute, loggedInUser);
 router.put('/updateDetails', protectRoute, updateDetails);
 router.put('/updatePassword', protectRoute, updatePassword);
