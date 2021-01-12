@@ -28,6 +28,8 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(msg, 400)
   }
 
+  //more errors 
+  
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Server error'
