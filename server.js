@@ -23,7 +23,6 @@ app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-//set security headers
 app.use(helmet());
 app.use(express.json());
 
