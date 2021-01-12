@@ -20,7 +20,7 @@ const authRouter = require('./routers/auth/auth.route');
 
 //middleware
 const { logger } = require('./middleware/logger.middleware');
-const { connectDB } = require('./config/db');
+const { connectDB } = require('./config/db'); 
 const { errorHandler } = require('./middleware/error.middleware');
 
 app = express();
@@ -41,7 +41,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 //enable cors
-app.use(cors());
+app.use(cors()); 
 
 app.use(express.json());
 
