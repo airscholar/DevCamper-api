@@ -3,6 +3,8 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const colors = require('colors');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -30,8 +32,16 @@ app.use(helmet());
 //prevent XSS scripting
 app.use(xss());
 //hpp param pollution
-app.use(hpp())
+app.use(hpp());
+//rate limit
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, //10 minutes
+  max: 100,
+});
+app.use(limiter);
 
+//enable cors
+app.use(cors());
 
 app.use(express.json());
 
