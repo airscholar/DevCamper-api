@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 const colors = require('colors');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -25,6 +27,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 //set security headers
 app.use(helmet());
+//prevent XSS scripting
+app.use(xss());
+//hpp param pollution
+app.use(hpp())
+
+
 app.use(express.json());
 
 // connect mongodb database
