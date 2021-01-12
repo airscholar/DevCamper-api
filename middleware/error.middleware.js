@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
 
   //bad object id
   if(err.name === 'CastError'){
-    const msg = `Resource  with id: ${err.value} not found`;
+    const msg = `Resource not found`;
 
     error = new ErrorResponse(msg, 404)
   }
@@ -28,6 +28,8 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(msg, 400)
   }
 
+  //more errors 
+  
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Server error'
