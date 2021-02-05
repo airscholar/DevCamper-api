@@ -17,7 +17,7 @@ const User = require('../../models/User');
 const router = express.Router();
 
 router.use(protectRoute)
-router.use(authorize('admin', 'super admin'))
+router.use(authorize('admin', 'superadmin'))
 
 router
   .route('/')
