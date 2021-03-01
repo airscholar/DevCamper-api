@@ -20,7 +20,7 @@ router
     }),
     getAllReviews
   )
-  .post(protectRoute, authorize('superadmin', 'admin', 'user'), createReview);
+  .post(protectRoute, authorize('super admin', 'admin', 'user'), createReview);
 router.route('/:id').get(getReview).put(protectRoute, updateReview);
 
 module.exports = router;
