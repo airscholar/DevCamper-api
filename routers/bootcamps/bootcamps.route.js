@@ -32,7 +32,7 @@ router
 router
   .route('/:id')
   .get(advancedResults(Bootcamp, 'courses'), getBootcampById)
-  .put(protectRoute, authorize('publisher', 'admin', 'superadmin'), updateBootcamp)
+  .put(protectRoute, authorize('publisher', 'admin', 'super admin'), updateBootcamp)
   .delete(protectRoute, authorize('publisher', 'admin', 'superadmin'), deleteBootcamp);
 
 module.exports = router;
