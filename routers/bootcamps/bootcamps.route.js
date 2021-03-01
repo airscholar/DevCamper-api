@@ -33,6 +33,6 @@ router
   .route('/:id')
   .get(advancedResults(Bootcamp, 'courses'), getBootcampById)
   .put(protectRoute, authorize('publisher', 'admin', 'super admin'), updateBootcamp)
-  .delete(protectRoute, authorize('publisher', 'admin', 'superadmin'), deleteBootcamp);
+  .delete(protectRoute, authorize('publisher', 'admin', 'super admin'), deleteBootcamp);
 
 module.exports = router;
