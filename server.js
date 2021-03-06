@@ -50,8 +50,8 @@ connectDB();
 const PORT = process.env.PORT;
 
 app.use(logger);
-app.use(fileUpload());
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(sanitize());
 
 //set static file
